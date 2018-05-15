@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: com.ibexsys.pwd.repository.AppProfileRepositoryTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 1.35 s <<< FAILURE! - in com.ibexsys.pwd.repository.AppProfileRepositoryTest
+findByIdBasicTest(com.ibexsys.pwd.repository.AppProfileRepositoryTest)  Time elapsed: 0.005 s  <<< FAILURE!
+java.lang.AssertionError
+	at com.ibexsys.pwd.repository.AppProfileRepositoryTest.findByIdBasicTest(AppProfileRepositoryTest.java:60)
+
