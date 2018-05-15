@@ -55,9 +55,7 @@ public class AppProfile {
 
 	@Column(name = "Login")
 	private String login;
-	
-	private String foo;
-	
+		
 	@Column(name = "LastLoginDTM")
 	private LocalDateTime lastLoginDTM;
 
