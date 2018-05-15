@@ -50,7 +50,7 @@ public class AppProfile {
 	@OneToOne(fetch=FetchType.LAZY,mappedBy="appProfile")
 	private User user;
 	
-	private String foobar2;
+	private String foobar22;
 	// @TODO - Look into why LAZY did not work
     @OneToMany(fetch=FetchType.EAGER, mappedBy="appProfile")
 	private List<Site> sites = new ArrayList<Site>();
