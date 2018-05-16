@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ibexsys.pwd.entity.Site;
-import com.ibexsys.pwd.entity.User;
 
 
 @Repository

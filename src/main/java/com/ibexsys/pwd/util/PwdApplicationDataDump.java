@@ -12,8 +12,8 @@ import com.ibexsys.pwd.PwdApplication;
 import com.ibexsys.pwd.entity.AppProfile;
 import com.ibexsys.pwd.entity.Site;
 import com.ibexsys.pwd.entity.User;
-import com.ibexsys.pwd.repository.SiteRepository;
 import com.ibexsys.pwd.repository.AppProfileRepository;
+import com.ibexsys.pwd.repository.SiteRepository;
 import com.ibexsys.pwd.repository.UserRepository;
 
 public class PwdApplicationDataDump {

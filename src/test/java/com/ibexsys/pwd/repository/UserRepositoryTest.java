@@ -1,8 +1,8 @@
 package com.ibexsys.pwd.repository;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
-import java.util.List;
+import javax.persistence.EntityManager;
 
 import org.junit.After;
 import org.junit.Before;
@@ -14,15 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import com.ibexsys.pwd.PwdApplication;
-import com.ibexsys.pwd.entity.Site;
 import com.ibexsys.pwd.entity.User;
-
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 
 
 @RunWith(SpringRunner.class)

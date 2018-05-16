@@ -1,12 +1,9 @@
 package com.ibexsys.pwd.util;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ibexsys.pwd.PwdApplication;
-import com.ibexsys.pwd.entity.AppProfile;
 import com.ibexsys.pwd.entity.Site;
-import com.ibexsys.pwd.entity.User;
-import com.ibexsys.pwd.repository.SiteRepository;
 import com.ibexsys.pwd.repository.AppProfileRepository;
+import com.ibexsys.pwd.repository.SiteRepository;
 import com.ibexsys.pwd.repository.UserRepository;
 
 
