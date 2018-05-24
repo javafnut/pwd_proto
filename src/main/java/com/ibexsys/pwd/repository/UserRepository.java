@@ -40,4 +40,16 @@ public class UserRepository {
 		
 		return namedQuery.getSingleResult();
 	}
+	
+	
+	public User saveUser(User user) {
+		if (user != null) {
+		     em.merge(user);
+		}
+
+		return user;
+	}
+	
+	
+	
 }

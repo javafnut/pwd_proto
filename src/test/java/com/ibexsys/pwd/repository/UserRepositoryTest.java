@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ibexsys.pwd.PwdApplication;
@@ -46,6 +47,28 @@ public class UserRepositoryTest implements CommandLineRunner{
 		assertNotNull(user);
 		assert(user.getId() == 10001L);
 	}
+	
+	@Test
+	@DirtiesContext
+	public void  updateUserInfoTest() {
+
+		User user = repo.findById(10001L);
+		assertNotNull(user);
+		assert(user.getId() == 10001L);
+		
+		user.setFirstName("TEST NAME");
+		repo.saveUser(user);
+		
+		user = repo.findById(10001L);
+		
+		assert(user.getFirstName().equalsIgnoreCase("TEST NAME"));
+		
+		
+	}
+	
+	
+	
+	
 	
 	
 //	@Test

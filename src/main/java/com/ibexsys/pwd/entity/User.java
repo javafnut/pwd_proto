@@ -50,8 +50,6 @@ public class User implements Serializable{
 	@Column(name = "Password")
 	private byte[] password;
 	
-
-	
     @UpdateTimestamp
     private LocalDateTime modifiedDate;
  

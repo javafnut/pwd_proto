@@ -2,6 +2,8 @@ package com.ibexsys.pwd.repository;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.junit.After;
@@ -13,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ibexsys.pwd.PwdApplication;
@@ -46,18 +49,44 @@ public class AppProfileRepositoryTest implements CommandLineRunner{
 		logger.info("Test is running....");
 	}	
 	
+	@Test
+	public void findAllProfiles() {
+		List<AppProfile> profiles = repo.findAll();
+		assert(profiles.size() > 0);
+	}
+	
 	
 	@Test
 	public void findByIdBasicTest() {
 
-		AppProfile uap = repo.findById(40000L);
+		AppProfile uap = repo.findById(10004L);
 		assertNotNull(uap);
-		assert(uap.getId() == 40000L);
+		assert(uap.getId() == 10004L);
+	}
+	
+	@Test
+	public void findByLoginBasicTest() {
+
+		AppProfile uap = repo.findById(10004L);
+		AppProfile uLogin = repo.findUserAppProfileByLogin(uap.getLogin());
+		assertNotNull(uLogin);
+		assert(uLogin.getLogin().equals(uap.getLogin()));
 	}
 	
 	
-	
-	
+	@Test
+	@DirtiesContext
+	public void removeAppProfile(){
+		AppProfile uap = repo.findById(10004L);
+		assertNotNull(uap);
+	    
+		repo.deleteAppProfile(uap);
+		
+		AppProfile gone = repo.findById(10004L);
+		assert(gone == null);
+		
+	}
+		
 //	@Test
 //	public void findByUserIdBasicTest() {
 //		
@@ -75,11 +104,5 @@ public class AppProfileRepositoryTest implements CommandLineRunner{
 //		assert(uaps.size() > 0);
 //		
 //	}
-	
-	
-	@Test
-	public void temp_foo() {
-		assert true;
-	}
 
 }

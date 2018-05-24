@@ -22,13 +22,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @Table(name = "AppProfile")
 @NamedQueries(value = { 
-@NamedQuery(name="find_all_user_app_profiles", query="select u from AppProfile u"),
-@NamedQuery(name="find_user_app_profile_by_user_id", query="select u from AppProfile u where userId=?")})
+@NamedQuery(name="find_all_user_profiles", query="select u from AppProfile u"),
+@NamedQuery(name="find_user_profile_by_user_id", query="select u from AppProfile u where id=?"),
+@NamedQuery(name="find_user_profile_by_login", query="select u from AppProfile u where login=?")})
 public class AppProfile {
 	
 	private static AppProfile instance = null;
-	public static final byte TRUE = 1;
-	public static final byte FALSE = 0;
+	public  static final byte TRUE = 1;
+	public  static final byte FALSE = 0;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

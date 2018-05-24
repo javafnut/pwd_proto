@@ -32,16 +32,32 @@ public class AppProfileRepository {
 	}
 	
 	public List<AppProfile> findAll(){
-		TypedQuery<AppProfile> namedQuery =  em.createNamedQuery("find_all_user_app_profiles",AppProfile.class);
+		TypedQuery<AppProfile> namedQuery =  em.createNamedQuery("find_all_user_profiles",AppProfile.class);
 		return namedQuery.getResultList();
 	}
 	
 	public AppProfile findUserAppProfileByUserId(Long id) {
-		TypedQuery<AppProfile> namedQuery = em.createNamedQuery("find_user_app_profile_by_user_id",AppProfile.class);
+		TypedQuery<AppProfile> namedQuery = em.createNamedQuery("find_user_profile_by_user_id",AppProfile.class);
 		namedQuery.setParameter(0, id);
 		return namedQuery.getSingleResult();
 	}
 	
+	public AppProfile findUserAppProfileByLogin(String login) {
+		TypedQuery<AppProfile> namedQuery = em.createNamedQuery("find_user_profile_by_login",AppProfile.class);
+		namedQuery.setParameter(0,login);
+		return namedQuery.getSingleResult();
+	}
+	
+	@Transactional
+    public void deleteAppProfile(AppProfile profile) {
+		
+		if (em.contains(profile)) {
+         	em.remove(profile);
+         	em.flush();
+		}
+		
+    }
+		
 	@Transactional
 	public AppProfile insertUserAndAppProfile(User user, AppProfile profile) {
 		em.persist(user);
