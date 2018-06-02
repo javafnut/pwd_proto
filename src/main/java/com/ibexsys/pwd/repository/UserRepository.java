@@ -21,7 +21,7 @@ public class UserRepository {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@PersistenceContext 
-	EntityManager em;
+	private EntityManager em;
 	
 	public User findById(Long id){
 		User user = em.find(User.class, id);

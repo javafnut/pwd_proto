@@ -1,5 +1,10 @@
 package com.ibexsys.pwd;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
+
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
@@ -24,21 +29,22 @@ import com.ibexsys.pwd.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class PwdApplicationTests implements CommandLineRunner{
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	EntityManager em;
+	private EntityManager em;
 
 	@Autowired
-	UserRepository userRepo;
+	private UserRepository userRepo;
 	
 	@Autowired
-	SiteRepository siteRepo;
+	private SiteRepository siteRepo;
 	
 	@Autowired
-	AppProfileRepository appProfileRepo;
+	private AppProfileRepository appProfileRepo;
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -55,17 +61,17 @@ public class PwdApplicationTests implements CommandLineRunner{
 	
 	@Test
 	@Transactional
-	@DirtiesContext
-	public void createCompleteAppProflie() {
+	public void createCompleteAppProfileTest() {
 		
 		byte[] salt = "UserSite".getBytes();
 	    byte[] password = "TestPassword".getBytes();
+	    Site site = null;
 		
 	    AppProfile profile = new AppProfile("TestLogin","PWDFile.pwd");	    
 	    User user = new User("Foo","Barr","Foo@Foo.bar",salt,password);
 	    appProfileRepo.insertUserAndAppProfile(user, profile);
 	    
-	    Site site = null;
+
 	   
 	    for (int i = 0; i < 4; i++) {
 	    	site = new Site("Test Site " + i,"ROOT","test@test.com","testLogin",password,"notes");
@@ -73,16 +79,57 @@ public class PwdApplicationTests implements CommandLineRunner{
 	      	//em.merge(site);
 	    }
 	    
-	    assert(profile.getId() > 0);
-	    assert(profile.getUser().getId() > 0);
-	    assert(profile.getUser().getEmail().equalsIgnoreCase("Foo@Foo.bar"));
-	    assert(profile.getSiteList().size() == 4);
+	    assertNotNull(profile);
+	    assertTrue(profile.getId() > 0);
+	    assertTrue(profile.getUser().getId() > 0);
+	    assertTrue(profile.getUser().getEmail().equalsIgnoreCase("Foo@Foo.bar"));
+	    assertTrue(profile.getSiteList().size() == 4);;
 	
 	}
+	
+	
+	// @ToDo Does AppProfilie removal remove the user ?
+	@Test
+	@Transactional
+	public void createAndDeleteCompleteAppProfileTest() {
+		
+		byte[] salt = "UserSite".getBytes();
+	    byte[] password = "TestPassword".getBytes();
+	    Site site = null;
+		
+	    AppProfile profile = new AppProfile("TestLogin","PWDFile.pwd");	    
+	    User user = new User("Foo","Barr","Foo@Foo.bar",salt,password);
+	    appProfileRepo.insertUserAndAppProfile(user, profile);
+	    
+
+	    for (int i = 0; i < 4; i++) {
+	    	site = new Site("Test Site " + i,"ROOT","test@test.com","testLogin",password,"notes");
+	    	profile = appProfileRepo.saveSite(profile, site);
+	      	//em.merge(site);
+	    }
+	    
+	    assertNotNull(profile);
+	    assertTrue(profile.getId() > 0);
+	    assertTrue(profile.getUser().getId() > 0);
+	    assertTrue(profile.getUser().getEmail().equalsIgnoreCase("Foo@Foo.bar"));
+	    assertTrue(profile.getSiteList().size() == 4);
+	    
+	    appProfileRepo.deleteAppProfile(profile.getId());
+	    assertNull(appProfileRepo.findById(profile.getId()));
+	    
+	    // Make sure the sites have been removed
+	    assertTrue(siteRepo.findAll().size() == 0);
+	    
+	    // profile still exists locally, lets make sure the user is deleted
+	    //assertNull(userRepo.findById(profile.getUser().getId()));
+	
+	}
+	
+	
+	
 	
 	@Test
 	public void contextLoads() {
 	}
-	
-	
+		
 }

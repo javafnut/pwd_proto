@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+//import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,8 +17,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Table(name = "AppProfile")
@@ -27,18 +30,23 @@ import org.hibernate.annotations.UpdateTimestamp;
 @NamedQuery(name="find_user_profile_by_login", query="select u from AppProfile u where login=?")})
 public class AppProfile {
 	
-	private static AppProfile instance = null;
-	public  static final byte TRUE = 1;
-	public  static final byte FALSE = 0;
+	public static final byte TRUE = 1;
+	public static final byte FALSE = 0;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToOne(fetch=FetchType.LAZY,mappedBy="appProfile")
+	@OneToOne(fetch=FetchType.EAGER,
+			  mappedBy="appProfile")
 	private User user;
 	
-    @OneToMany(fetch=FetchType.EAGER, mappedBy="appProfile")
+//	@OneToMany(fetch=FetchType.EAGER, 
+//    		   mappedBy="appProfile",
+//    		   cascade = CascadeType.REMOVE)
+	
+	@OneToMany(fetch=FetchType.EAGER, 
+	           mappedBy="appProfile")
 	private List<Site> sites = new ArrayList<Site>();
 
 	@Column(name = "Login")
@@ -74,15 +82,6 @@ public class AppProfile {
      	this.createdDate = LocalDateTime.now();
      	this.modifiedDate = LocalDateTime.now();
     }
-
-	public static AppProfile getInstance() {
-
-		if (AppProfile.instance == null) {
-			instance = new AppProfile();
-		}
-
-		return instance;
-	}
 
 	public void addSite(Site site){
 

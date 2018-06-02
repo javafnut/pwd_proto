@@ -21,7 +21,7 @@ public class SiteRepository {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 		
 	@PersistenceContext 
-	EntityManager em;
+	private EntityManager em;
 	
 	public Site findById(Long id){
 		Site site = em.find(Site.class, id);

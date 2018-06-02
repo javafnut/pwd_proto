@@ -24,7 +24,7 @@ public class AppProfileRepository {
 	
 	
 	@PersistenceContext 
-	EntityManager em;
+	private EntityManager em;
 	
 	public AppProfile findById(Long id){
 		AppProfile userAppProfile = em.find(AppProfile.class, id);
@@ -84,6 +84,15 @@ public class AppProfileRepository {
 		em.merge(profile);
 		
 		return profile;
+	}
+	
+	@Transactional
+	public void deleteAppProfile(Long id) {
+		
+		AppProfile profile = findById(id);
+		//List<Site> sites = 
+				
+		em.remove(profile);
 	}
 	
 	
