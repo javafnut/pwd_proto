@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Cacheable;
 //import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,19 +18,22 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "AppProfile")
-@NamedQueries(value = { 
-@NamedQuery(name="find_all_user_profiles", query="select u from AppProfile u"),
-@NamedQuery(name="find_user_profile_by_user_id", query="select u from AppProfile u where id=?"),
-@NamedQuery(name="find_user_profile_by_login", query="select u from AppProfile u where login=?")})
+@Cacheable // Causes entity to do cache lookup in 2nd level cache
+@SQLDelete(sql = "update AppProfile set is_deleted=true where id=?") // Hibernate Specific
+@Where(clause = "is_deleted = false")
+@NamedQueries(value = { @NamedQuery(name = "find_all_user_profiles", query = "select u from AppProfile u"),
+		@NamedQuery(name = "find_user_profile_by_user_id", query = "select u from AppProfile u where id=?"),
+		@NamedQuery(name = "find_user_profile_by_login", query = "select u from AppProfile u where login=?") })
 public class AppProfile {
-	
+
+	// @ToDo clean this up
 	public static final byte TRUE = 1;
 	public static final byte FALSE = 0;
 
@@ -37,60 +41,60 @@ public class AppProfile {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToOne(fetch=FetchType.EAGER,
-			  mappedBy="appProfile")
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "appProfile")
 	private User user;
-	
-//	@OneToMany(fetch=FetchType.EAGER, 
-//    		   mappedBy="appProfile",
-//    		   cascade = CascadeType.REMOVE)
-	
-	@OneToMany(fetch=FetchType.EAGER, 
-	           mappedBy="appProfile")
+
+	// @OneToMany(fetch=FetchType.EAGER,
+	// mappedBy="appProfile",
+	// cascade = CascadeType.REMOVE)
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "appProfile")
 	private List<Site> sites = new ArrayList<Site>();
 
 	@Column(name = "Login")
 	private String login;
-		
+
 	@Column(name = "LastLoginDTM")
 	private LocalDateTime lastLoginDTM;
 
-    @Column(name = "Active")
-    private boolean isActive;
-    
-    @Column(name="AccountLocked")
-    private boolean isLocked;
-    
-    @Column(name="PwdFileName")
+	@Column(name = "Active")
+	private boolean isActive;
+
+	@Column(name = "AccountLocked")
+	private boolean isLocked;
+
+	@Column(name = "PwdFileName")
 	private String pwdFileName;
-    
-    @UpdateTimestamp
-    private LocalDateTime modifiedDate;
- 
-    @CreationTimestamp
-    private LocalDateTime createdDate;
 
+	@UpdateTimestamp
+	private LocalDateTime modifiedDate;
 
-	protected AppProfile() {};
-	
-    public AppProfile(String login, String pwdFileName) {
-    	this.login = login;
-    	this.pwdFileName = pwdFileName;
-    	this.isLocked = false;
-    	this.isActive = true;
-     	this.lastLoginDTM = LocalDateTime.now();
-     	this.createdDate = LocalDateTime.now();
-     	this.modifiedDate = LocalDateTime.now();
-    }
+	@CreationTimestamp
+	private LocalDateTime createdDate;
 
-	public void addSite(Site site){
+	private boolean isDeleted;
 
-//		if (site == null || this.getSiteList() == null)
-//			throw new Exception("Either Site or SiteList is Null");
-		
-	    this.getSiteList().add(site);
+	protected AppProfile() {
+	};
+
+	public AppProfile(String login, String pwdFileName) {
+		this.login = login;
+		this.pwdFileName = pwdFileName;
+		this.isLocked = false;
+		this.isActive = true;
+		this.lastLoginDTM = LocalDateTime.now();
+		this.createdDate = LocalDateTime.now();
+		this.modifiedDate = LocalDateTime.now();
+		this.isDeleted = false;
 	}
-	
+
+	public void addSite(Site site) {
+
+		// if (site == null || this.getSiteList() == null)
+		// throw new Exception("Either Site or SiteList is Null");
+
+		this.getSiteList().add(site);
+	}
 
 	public String getPwdFileName() {
 		return pwdFileName;
@@ -116,18 +120,18 @@ public class AppProfile {
 		this.lastLoginDTM = lastLoginDTM;
 	}
 
-//	public User getAppUser() {
-//		return user;
-//	}
-//
-//	public void setAppUser(User appUser) {
-//		this.user = appUser;
-//	}
+	// public User getAppUser() {
+	// return user;
+	// }
+	//
+	// public void setAppUser(User appUser) {
+	// this.user = appUser;
+	// }
 
 	public List<Site> getSiteList() {
 		return this.sites;
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
@@ -152,11 +156,9 @@ public class AppProfile {
 		this.isLocked = isLocked;
 	}
 
-
 	public LocalDateTime getModifiedDate() {
 		return modifiedDate;
 	}
-
 
 	public void setModifiedDate(LocalDateTime modifiedDate) {
 		this.modifiedDate = modifiedDate;
@@ -166,7 +168,6 @@ public class AppProfile {
 		return createdDate;
 	}
 
-
 	public void setCreatedDate(LocalDateTime createdDate) {
 		this.createdDate = createdDate;
 	}
@@ -174,7 +175,6 @@ public class AppProfile {
 	public Long getId() {
 		return id;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -185,8 +185,9 @@ public class AppProfile {
 		return result;
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -211,16 +212,25 @@ public class AppProfile {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "AppProfile [id=" + id + ", user=" + user + "\n, sites=" + sites + "\n, login=" + login + ", lastLoginDTM="
-				+ lastLoginDTM + ", isActive=" + isActive + ", isLocked=" + isLocked + "\n, pwdFileName=" + pwdFileName
-				+ ", modifiedDate=" + modifiedDate + ", createdDate=" + createdDate + "]";
+		return "AppProfile [id=" + id + ", user=" + user + "\n, sites=" + sites + "\n, login=" + login
+				+ ", lastLoginDTM=" + lastLoginDTM + ", isActive=" + isActive + ", isLocked=" + isLocked
+				+ "\n, pwdFileName=" + pwdFileName + ", modifiedDate=" + modifiedDate + ", createdDate=" + createdDate
+				+ "]";
 	}
 
+	public boolean isDeleted() {
+		return isDeleted;
+	}
 
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 
 }

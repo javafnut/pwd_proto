@@ -12,12 +12,11 @@ import com.ibexsys.pwd.repository.SiteRepository;
 import com.ibexsys.pwd.repository.UserRepository;
 import com.ibexsys.pwd.util.PwdApplicationDataDump;
 
-
 @SpringBootApplication
 public class PwdApplication implements CommandLineRunner {
-	
+
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
 	public UserRepository userRepo;
 
@@ -27,31 +26,31 @@ public class PwdApplication implements CommandLineRunner {
 	@Autowired
 	public AppProfileRepository userAppProfileRepo;
 
-
 	public static void main(String[] args) {
 		SpringApplication.run(PwdApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		runDumpAppData();
+		// runDumpAppData();
 		// quickSave();
 	}
-	
-//	public void quickSave() {
-//		
-//	    byte[] byteArray = "TestPassword".getBytes();	    
-//	    siteRepo.save(new Site("Test Site","ROOT","test@test.com","testLogin",byteArray,"notes"));
-//		
-//	}
-	
+
+	// public void quickSave() {
+	//
+	// byte[] byteArray = "TestPassword".getBytes();
+	// siteRepo.save(new Site("Test
+	// Site","ROOT","test@test.com","testLogin",byteArray,"notes"));
+	//
+	// }
+
 	public void runDumpAppData() {
-		
+
 		PwdApplicationDataDump data = new PwdApplicationDataDump(this);
-    	//data.dumpAllTableData();
-    	logger.info("Data Dump\n\n" + data.dumpStrings());
-    	
-    	 data.createCompleteAppProflie();
+		// data.dumpAllTableData();
+		logger.info("Data Dump\n\n" + data.dumpStrings());
+
+		data.createCompleteAppProflie();
 
 	}
 

@@ -1,6 +1,10 @@
 package com.ibexsys.pwd.repository;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
@@ -19,19 +23,19 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.ibexsys.pwd.PwdApplication;
 import com.ibexsys.pwd.entity.User;
 
-
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes=PwdApplication.class)
-public class UserRepositoryTest implements CommandLineRunner{
-	
+@SpringBootTest(classes = PwdApplication.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+public class UserRepositoryTest implements CommandLineRunner {
+
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
-	UserRepository repo;
-	
+	private UserRepository repo;
+
 	@Autowired
-	EntityManager em;
-	
+	private EntityManager em;
+
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -39,62 +43,54 @@ public class UserRepositoryTest implements CommandLineRunner{
 	@After
 	public void tearDown() throws Exception {
 	}
-	
+
 	@Test
 	public void findByIdBasicTest() {
 
 		User user = repo.findById(10001L);
 		assertNotNull(user);
-		assert(user.getId() == 10001L);
+		assertEquals(user.getId(), Long.valueOf(10001));
 	}
-	
+
 	@Test
-	@DirtiesContext
-	public void  updateUserInfoTest() {
+	public void updateUserInfoTest() {
 
 		User user = repo.findById(10001L);
 		assertNotNull(user);
-		assert(user.getId() == 10001L);
-		
+		assertEquals(user.getId(), Long.valueOf(10001));
+
 		user.setFirstName("TEST NAME");
 		repo.saveUser(user);
-		
+
 		user = repo.findById(10001L);
-		
-		assert(user.getFirstName().equalsIgnoreCase("TEST NAME"));
-		
-		
+
+		assertTrue(user.getFirstName().equalsIgnoreCase("TEST NAME"));
+
 	}
-	
-	
-	
-	
-	
-	
-//	@Test
-//	public void findByNameBasicTest() {
-//		
-//		User user = repo.findByFullName("Dave","McBrave-1");
-//		assertNotNull(user);
-//		assert(user.getFirstName().equals("Dave") && user.getLastName().equals("McBrave-1"));
-//		
-//	}
-//	
-//	@Test
-//	public void findAllBasicTest() {
-//		
-//		List<User> users = repo.findAll();
-//		assertNotNull(users);
-//		assert(users.size() > 0);
-//		
-//	}
+
+	// @Test
+	// public void findByNameBasicTest() {
+	//
+	// User user = repo.findByFullName("Dave","McBrave-1");
+	// assertNotNull(user);
+	// assert(user.getFirstName().equals("Dave") &&
+	// user.getLastName().equals("McBrave-1"));
+	//
+	// }
+	//
+	@Test
+	public void findAllBasicTest() {
+
+		List<User> users = repo.findAll();
+		assertNotNull(users);
+		assert (users.size() > 0);
+
+	}
 
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
-		
-	}	
-	
 
+	}
 
 }

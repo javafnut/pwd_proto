@@ -1,6 +1,5 @@
 package com.ibexsys.pwd.entity;
 
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -20,33 +19,32 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "Site")
-@NamedQueries(value = { 
-@NamedQuery(name="find_all_sites", query="select s from Site s"),
-@NamedQuery(name="find_site_by_name", query="select s from Site s where name=?")})
+@NamedQueries(value = { @NamedQuery(name = "find_all_sites", query = "select s from Site s"),
+		@NamedQuery(name = "find_site_by_name", query = "select s from Site s where name=?") })
 public class Site implements Serializable {
 
 	@Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(name = "Name")
 	private String name;
-	
-	@Column(name="Category_Name")
+
+	@Column(name = "Category_Name")
 	private String category;
-	
+
 	@ManyToOne
 	private AppProfile appProfile;
-	
+
 	@Column(name = "SiteURL")
 	private String siteURL;
-	
+
 	@Column(name = "Login")
 	private String login;
-	
+
 	@Column(name = "SitePwd")
 	private byte[] password;
-	
+
 	@Column(name = "Notes")
 	private String notes;
 
@@ -55,11 +53,12 @@ public class Site implements Serializable {
 
 	@CreationTimestamp
 	private LocalDateTime createdDate;
-	
-	protected Site() {}
-	
-	public Site(String name, String category, String siteURL, String login, byte[] password, String notes ) {
-		
+
+	protected Site() {
+	}
+
+	public Site(String name, String category, String siteURL, String login, byte[] password, String notes) {
+
 		this.name = name;
 		this.category = category;
 		this.siteURL = siteURL;
@@ -71,7 +70,7 @@ public class Site implements Serializable {
 	public Long getId() {
 		return id;
 	}
-	
+
 	public AppProfile getAppProfile() {
 		return appProfile;
 	}
@@ -106,7 +105,6 @@ public class Site implements Serializable {
 		this.login = login;
 	}
 
-	
 	public byte[] getPassword() {
 		return password;
 	}
@@ -114,7 +112,6 @@ public class Site implements Serializable {
 	public void setPassword(byte[] password) {
 		this.password = password;
 	}
-
 
 	public String getNotes() {
 		return notes;
@@ -139,9 +136,10 @@ public class Site implements Serializable {
 	public void setCreatedDate(LocalDateTime createdDate) {
 		this.createdDate = createdDate;
 	}
-	
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -150,6 +148,5 @@ public class Site implements Serializable {
 				+ ", siteURL=" + siteURL + ", login=" + login + ", password=" + Arrays.toString(password) + ", notes="
 				+ notes + ", modifiedDate=" + modifiedDate + ", createdDate=" + createdDate + "]";
 	}
-
 
 }

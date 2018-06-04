@@ -13,43 +13,39 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ibexsys.pwd.entity.User;
 
-
 @Repository
 @Transactional
 public class UserRepository {
-	
+
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	@PersistenceContext 
+
+	@PersistenceContext
 	private EntityManager em;
-	
-	public User findById(Long id){
+
+	public User findById(Long id) {
 		User user = em.find(User.class, id);
 		return user;
 	}
-	
-	public List<User> findAll(){
-		TypedQuery<User> namedQuery =  em.createNamedQuery("find_all_users",User.class);
+
+	public List<User> findAll() {
+		TypedQuery<User> namedQuery = em.createNamedQuery("find_all_users", User.class);
 		return namedQuery.getResultList();
 	}
-	
-	public User findByFullName(String first,String last) {
-		TypedQuery<User> namedQuery = em.createNamedQuery("find_User_by_full_name",User.class);
+
+	public User findByFullName(String first, String last) {
+		TypedQuery<User> namedQuery = em.createNamedQuery("find_User_by_full_name", User.class);
 		namedQuery.setParameter(0, first);
 		namedQuery.setParameter(1, last);
-		
+
 		return namedQuery.getSingleResult();
 	}
-	
-	
+
 	public User saveUser(User user) {
 		if (user != null) {
-		     em.merge(user);
+			em.merge(user);
 		}
 
 		return user;
 	}
-	
-	
-	
+
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,57 +17,65 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "User")
-@NamedQueries(value = { 
-@NamedQuery(name="find_all_users", query="select u from User u"),
-@NamedQuery(name="find_User_by_full_name", query="select u from User u where u.firstName= ? and u.lastName = ?")})
-//@SequenceGenerator(name = "userId_gen", sequenceName = "userId_gen",  initialValue = 1000)
-public class User implements Serializable{
+@Cacheable // Causes entity to do cache lookup in 2nd level cache
+@SQLDelete(sql = "update Site set is_deleted=true where id=?")
+@Where(clause = "is_deleted = false")
+@NamedQueries(value = { @NamedQuery(name = "find_all_users", query = "select u from User u"),
+		@NamedQuery(name = "find_User_by_full_name", query = "select u from User u where u.firstName= ? and u.lastName = ?") })
+// @SequenceGenerator(name = "userId_gen", sequenceName = "userId_gen",
+// initialValue = 1000)
+public class User implements Serializable {
 
-	//private static final long serialVersionUID = -6528351877018119894L;
-	
+	// private static final long serialVersionUID = -6528351877018119894L;
+
 	@Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@OneToOne(fetch=FetchType.LAZY)
+
+	@OneToOne(fetch = FetchType.LAZY)
 	private AppProfile appProfile;
-	
+
 	@Column(name = "FirstName")
 	private String firstName;
-	
+
 	@Column(name = "LastName")
 	private String lastName;
-	
+
 	@Column(name = "Email")
 	private String email;
-	
+
 	@Column(name = "UserSalt")
 	private byte[] salt;
-	
+
 	@Column(name = "Password")
 	private byte[] password;
-	
-    @UpdateTimestamp
-    private LocalDateTime modifiedDate;
- 
-    @CreationTimestamp
-    private LocalDateTime createdDate;
-    
-    protected User() {}
-    
-    public User(String firstName, String lastName, String email, byte[] userSalt, byte[] password) {
-    	this.firstName = firstName;
-    	this.lastName = lastName;
-    	this.email = email;
-    	this.salt = userSalt;
-    	this.password = password;
-    	this.createdDate = LocalDateTime.now();
-    	this.modifiedDate = this.createdDate;
-    }
+
+	@UpdateTimestamp
+	private LocalDateTime modifiedDate;
+
+	@CreationTimestamp
+	private LocalDateTime createdDate;
+
+	private boolean isDeleted;
+
+	protected User() {
+	}
+
+	public User(String firstName, String lastName, String email, byte[] userSalt, byte[] password) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.salt = userSalt;
+		this.password = password;
+		this.createdDate = LocalDateTime.now();
+		this.modifiedDate = this.createdDate;
+	}
 
 	public Long getId() {
 		return this.id;
@@ -136,7 +145,9 @@ public class User implements Serializable{
 		this.appProfile = appProfile;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -154,7 +165,9 @@ public class User implements Serializable{
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -203,7 +216,9 @@ public class User implements Serializable{
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -213,19 +228,26 @@ public class User implements Serializable{
 				+ modifiedDate + ", createdDate=" + createdDate + "]";
 	}
 
-//	/**
-//	 * @return the userAppProfile
-//	 */
-//	public UserAppProfile getUserAppProfile() {
-//		return userAppProfile;
-//	}
-//
-//	/**
-//	 * @param userAppProfile the userAppProfile to set
-//	 */
-//	public void setUserAppProfile(UserAppProfile userAppProfile) {
-//		this.userAppProfile = userAppProfile;
-//	}
+	public boolean isDeleted() {
+		return isDeleted;
+	}
 
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	// /**
+	// * @return the userAppProfile
+	// */
+	// public UserAppProfile getUserAppProfile() {
+	// return userAppProfile;
+	// }
+	//
+	// /**
+	// * @param userAppProfile the userAppProfile to set
+	// */
+	// public void setUserAppProfile(UserAppProfile userAppProfile) {
+	// this.userAppProfile = userAppProfile;
+	// }
 
 }

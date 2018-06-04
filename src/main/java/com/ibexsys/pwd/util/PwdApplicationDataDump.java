@@ -52,46 +52,41 @@ public class PwdApplicationDataDump {
 		dumpSites();
 		dumpAppProfiles();
 	}
-	
+
 	public StringBuffer dumpStrings() {
-		
+
 		StringBuffer buffer = new StringBuffer();
 		String demarker = "\n=========================================================================\n";
-		
-		
+
 		buffer.append(demarker);
-				
+
 		List<User> allUsers = userRepo.findAll();
-		
+
 		for (User user : allUsers) {
 			buffer.append(user.toString()).append("\n");
 		}
-		
+
 		buffer.append(demarker);
-		
-				
+
 		List<Site> allSites = siteRepo.findAll();
 
 		for (Site site : allSites) {
 			buffer.append(site.toString()).append("\n");
 		}
-		
+
 		buffer.append(demarker);
-				
-		
+
 		List<AppProfile> appProfiles = appProfileRepo.findAll();
 
 		for (AppProfile userProfile : appProfiles) {
 			buffer.append(userProfile.toString()).append("\n");
 		}
-		
-		buffer.append(demarker);
-		
-		return buffer;
-		
-	}
-	
 
+		buffer.append(demarker);
+
+		return buffer;
+
+	}
 
 	public void dumpUsers() {
 
@@ -119,27 +114,25 @@ public class PwdApplicationDataDump {
 			logger.info("UserAppProfile -> {}", userAppProfile);
 		}
 	}
-	
-	public void createCompleteAppProflie() {
-		
-		byte[] salt = "UserSite".getBytes();
-	    byte[] password = "TestPassword".getBytes();	
-	    
-	    Site site = null;
-	    
-	    User user = new User("FooName", "fooLastName","foo@foo.bar",salt,password);
-	    AppProfile appProfile = new AppProfile("New User XX","Foo.xml");
-	   
-        AppProfile profile = appProfileRepo.insertUserAndAppProfile(user, appProfile);
-        
-        
-        for (int i = 0; i < 5; i++) {
-        	 site = new Site("Test Site - " + i,"ROOT","test@test.com","testLogin",password,"notes");
-        	 appProfileRepo.saveSite(profile, site);
-        }
 
-        logger.info("================>\n" + profile.toString());
-	
-	
+	public void createCompleteAppProflie() {
+
+		byte[] salt = "UserSite".getBytes();
+		byte[] password = "TestPassword".getBytes();
+
+		Site site = null;
+
+		User user = new User("FooName", "fooLastName", "foo@foo.bar", salt, password);
+		AppProfile appProfile = new AppProfile("New User XX", "Foo.xml");
+
+		AppProfile profile = appProfileRepo.insertUserAndAppProfile(user, appProfile);
+
+		for (int i = 0; i < 5; i++) {
+			site = new Site("Test Site - " + i, "ROOT", "test@test.com", "testLogin", password, "notes");
+			appProfileRepo.saveSite(profile, site);
+		}
+
+		logger.info("================>\n" + profile.toString());
+
 	}
 }

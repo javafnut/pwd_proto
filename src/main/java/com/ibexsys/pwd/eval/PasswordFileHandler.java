@@ -1,13 +1,13 @@
 package com.ibexsys.pwd.eval;
 
+import java.util.ArrayList;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.ibexsys.pwd.entity.Site;
 import com.ibexsys.pwd.entity.User;
-
-import java.util.ArrayList;
 
 @XmlRootElement(name = "PwdUserModel")
 public class PasswordFileHandler {
