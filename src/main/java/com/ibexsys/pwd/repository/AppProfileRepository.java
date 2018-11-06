@@ -3,6 +3,7 @@ package com.ibexsys.pwd.repository;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -48,7 +49,7 @@ public class AppProfileRepository {
 
 	@Transactional
 	public void deleteAppProfile(AppProfile profile) {
-
+		
 		if (em.contains(profile)) {
 			em.remove(profile);
 			em.flush();

@@ -68,16 +68,17 @@ public class UserRepositoryTest implements CommandLineRunner {
 
 	}
 
-	// @Test
-	// public void findByNameBasicTest() {
-	//
-	// User user = repo.findByFullName("Dave","McBrave-1");
-	// assertNotNull(user);
-	// assert(user.getFirstName().equals("Dave") &&
-	// user.getLastName().equals("McBrave-1"));
-	//
-	// }
-	//
+	 @Test
+	 public void findByNameBasicTest() {
+	
+	 User user = repo.findByFullName("Todd","McDee1");
+	 assertNotNull(user);
+	 assert(user.getFirstName().equals("Todd") &&
+	 user.getLastName().equals("McDee1"));
+	
+	 }
+	
+
 	@Test
 	public void findAllBasicTest() {
 

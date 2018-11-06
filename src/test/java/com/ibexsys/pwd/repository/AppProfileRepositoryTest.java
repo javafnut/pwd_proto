@@ -81,7 +81,9 @@ public class AppProfileRepositoryTest implements CommandLineRunner {
 
 		repo.deleteAppProfile(uap);
 
+		
 		AppProfile gone = repo.findById(10004L);
+		
 		assertNull(gone);
 
 	}

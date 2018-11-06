@@ -3,6 +3,8 @@ package com.ibexsys.pwd.repository;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.junit.After;
@@ -61,34 +63,33 @@ public class SiteRepositoryTest implements CommandLineRunner {
 
 	}
 
-	// @Test
-	// public void findByIdBasicTest() {
-	//
-	// repo.save(new Site("Test
-	// Site","ROOT","test@test.com","testLogin",BYTE_ARRAY,"notes"));
-	// Site site = repo.findSiteByName("Test Site");
-	//
-	// Site testSite = repo.findById(site.getId());
-	// assertNotNull(testSite);
-	// assert(site.getId() == testSite.getId());
-	// }
+	 @Test
+	 public void findByIdBasicTest() {
+	
+	 repo.save(new Site("Test Site","ROOT","test@test.com","testLogin",BYTE_ARRAY,"notes"));
+	 Site site = repo.findSiteByName("Test Site");
+	
+	 Site testSite = repo.findById(site.getId());
+	 assertNotNull(testSite);
+	 assert(site.getId() == testSite.getId());
+	 }
 
-	// @Test
-	// public void findByNameBasicTest() {
-	//
-	// Site site = repo.findSiteByName("Foo Mfg1");
-	// assertNotNull(site);
-	// assert(site.getSiteName().equals("Foo Mfg1"));
-	//
-	// }
-	//
-	// @Test
-	// public void findAllBasicTest() {
-	//
-	// List<Site> sites = repo.findAll();
-	// assertNotNull(sites);
-	// assert(sites.size() > 0);
-	//
-	// }
+	 @Test
+	 public void findByNameBasicTest() {
+	
+	 Site site = repo.findSiteByName("foo1.com");
+	 assertNotNull(site);
+	 assert(site.getSiteName().equals("foo1.com"));
+	
+	 }
+	
+	 @Test
+	 public void findAllBasicTest() {
+	
+	 List<Site> sites = repo.findAll();
+	 assertNotNull(sites);
+	 assert(sites.size() > 0);
+	
+	 }
 
 }
